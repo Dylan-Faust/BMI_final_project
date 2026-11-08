@@ -25,11 +25,43 @@ def view_companies():
         print(f"  Max Leverage Ratio: {details['max_leverage']}x")
     print("\n-----------------------------------")
 
+def add_update_company():
+    print("\n--- Add or Update Company Financials ---")
+    ticker = input("Enter company ticker symbol (e.g., AAPL): ").strip().upper()
+    
+    print(f"\n>> Fetching live financial data for {ticker} via Yahoo Finance API...")
+    
+    stock = yf.Ticker(ticker)
+    info_dict = stock.info
+    ebitda = info_dict.get('ebitda', None)
+        
+    if ebitda:
+        print(f">> Success! Retrieved TTM EBITDA: ${ebitda:,}")
+    else:
+        print(">> EBITDA not found on Yahoo Finance. Switching to manual entry.")
+        
+    if not ebitda:
+        while True:
+            ebitda_input = input(f"Enter TTM EBITDA for {ticker} (whole number): ").strip()
+            if ebitda_input.isdigit():
+                ebitda = int(ebitda_input)
+                break
+            else:
+                print("Invalid input. Please enter a numeric value.")
+                
+    print("\n>> Enter internal banking covenants:")
+    while True:
+        revolver_input = input(f"Enter Revolver Limit for {ticker} (whole number): ").strip()
+        if revolver_input.isdigit():
+            revolver = int(revolver_input)
+            break
+        else:
+            print("Invalid input. Please enter a numeric value.")
     
 def refresh_live_data():
     print("\n>> Fetching live API data to update dictionary...")
     for ticker in portfolio_companies.keys():
-        # API call without try/except block
+       1
         stock = yf.Ticker(ticker)
         live_ebitda = stock.info.get('ebitda')
         
