@@ -1,3 +1,4 @@
+from m1_menu_funcs import manage_financials_menu
 # Function to print all menu options for the risk assessment tool
 def show_menu():
     print("\n" + "="*45)
@@ -17,7 +18,7 @@ def main():
         choice = input("Select a menu option (1-5): ").strip()
         
         if choice == '1':
-            print("Coming soon")
+            manage_financials_menu()
         elif choice == '2':
             print("Coming soon")
         elif choice == '3':
