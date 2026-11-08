@@ -1,0 +1,17 @@
+The project proposal primarily outlined the high-level, backend analytical functions needed for 
+the predictive engine, such as fitting the SARIMAX baseline and running the Monte Carlo 
+simulation. 
+
+However, to build a working user interface that captures the data for those models, I had to 
+break down the first menu option, "Input Company Financials", into smaller steps. Instead of 
+one massive block of code handling everything, i created individual functions to view the 
+portfolio, add or update a specific company's data, fetch live API pricing, and route those 
+choices through a sub-menu. In the future, likely this next week?s assignment, I will have that 
+dictionary read from a csv rather than storing it in memory.
+My backend will also have a few imported dictionaries from fred but considering they will be 
+used to train the sarimax and xgboost models, I figured I?d wait to implement that until we 
+covered the monte carlo requirement and already started csv reading and writing.
+
+Essentially, the proposal listed the math functions, while the code I just wrote represents the 
+user interface functions needed to gather the data before the math can happen.
+

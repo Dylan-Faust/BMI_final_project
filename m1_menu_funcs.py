@@ -1,6 +1,6 @@
 import yfinance as yf
 
-# Main dictionary representing portfolio
+# Main dictionary representing portfolio... will be represented in a csv file in the future
 portfolio_companies = {
     "CAT": {"ttm_ebitda": 8500000, "funded_debt": 25000000, "max_leverage": 4.0, "revolver_limit": 9000000},
     "DE": {"ttm_ebitda": 12000000, "funded_debt": 30000000, "max_leverage": 3.5, "revolver_limit": 12000000},
