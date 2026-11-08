@@ -61,7 +61,6 @@ def add_update_company():
 def refresh_live_data():
     print("\n>> Fetching live API data to update dictionary...")
     for ticker in portfolio_companies.keys():
-       1
         stock = yf.Ticker(ticker)
         live_ebitda = stock.info.get('ebitda')
         
