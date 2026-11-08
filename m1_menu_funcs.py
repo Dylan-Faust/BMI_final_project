@@ -1,28 +1,30 @@
 import yfinance as yf
 
-# Main dictionary holding portfolio companies
+# Main dictionary representing portfolio
 portfolio_companies = {
-    "CAT": {"ttm_ebitda": 8500000, "revolver_limit": 50000000, "max_leverage": 4.0},
-    "DE": {"ttm_ebitda": 12000000, "revolver_limit": 75000000, "max_leverage": 3.5},
-    "URI": {"ttm_ebitda": 5000000, "revolver_limit": 25000000, "max_leverage": 4.5}
+    "CAT": {"ttm_ebitda": 8500000, "funded_debt": 25000000, "max_leverage": 4.0, "revolver_limit": 9000000},
+    "DE": {"ttm_ebitda": 12000000, "funded_debt": 30000000, "max_leverage": 3.5, "revolver_limit": 12000000},
+    "URI": {"ttm_ebitda": 5000000, "funded_debt": 10000000, "max_leverage": 4.5, "revolver_limit": 12500000}
 }
-
-# Function to view all current portfolio companies and their financial constraints
+#allows the user to view portfolio and current fincial information
 def view_companies():
     print("\n--- Current Portfolio Companies (Live Data) ---")
     for ticker, details in portfolio_companies.items():
-        # Fetch live data for each ticker in the dictionary
         stock = yf.Ticker(ticker)
         info_dict = stock.info
         live_ebitda = info_dict.get('ebitda', None)
         
-        # Use live data if available, otherwise fallback to the stored static data
         display_ebitda = live_ebitda if live_ebitda else details['ttm_ebitda']
         
+        # Dynamically recalculate the revolver limit in case the live EBITDA changed
+        revolver_capacity = (details['max_leverage'] * display_ebitda) - details['funded_debt']
+        dynamic_revolver = max(0, revolver_capacity)
+        
         print(f"\nTicker: {ticker}")
-        print(f"  TTM EBITDA: ${display_ebitda:,} {'(Live)' if live_ebitda else '(Manual)'}")
-        print(f"  Revolver Limit: ${details['revolver_limit']:,}")
+        print(f"  TTM EBITDA: ${display_ebitda:,.0f} {'(Live)' if live_ebitda else '(Manual)'}")
+        print(f"  Funded Debt: ${details['funded_debt']:,.0f}")
         print(f"  Max Leverage Ratio: {details['max_leverage']}x")
+        print(f"  Calculated Revolver Limit: ${dynamic_revolver:,.0f}")
     print("\n-----------------------------------")
 
 def add_update_company():
@@ -49,24 +51,48 @@ def add_update_company():
             else:
                 print("Invalid input. Please enter a numeric value.")
                 
-    print("\n>> Enter internal banking covenants:")
+    print("\n>> Enter internal banking covenants & debt:")
     while True:
-        revolver_input = input(f"Enter Revolver Limit for {ticker} (whole number): ").strip()
-        if revolver_input.isdigit():
-            revolver = int(revolver_input)
+        debt_input = input(f"Enter Current Funded Debt for {ticker} (whole number): ").strip()
+        if debt_input.isdigit():
+            funded_debt = int(debt_input)
             break
         else:
             print("Invalid input. Please enter a numeric value.")
-    
+            
+    while True:
+        leverage_input = input(f"Enter Max Leverage Ratio for {ticker} (e.g., 4.0): ").strip()
+        if leverage_input.replace('.', '', 1).isdigit():
+            leverage = float(leverage_input)
+            break
+        else:
+            print("Invalid input. Please enter a decimal or whole number.")
+            
+    # Calculate the revolver limit mathematically based on inputs
+    revolver_capacity = (leverage * ebitda) - funded_debt
+    revolver_limit = max(0, revolver_capacity)
+            
+    portfolio_companies[ticker] = {
+        "ttm_ebitda": ebitda,
+        "funded_debt": funded_debt,
+        "max_leverage": leverage,
+        "revolver_limit": revolver_limit
+    }
+    print(f"\nSuccess! Financials and covenants for {ticker} have been saved.")
+    print(f">> Dynamically Calculated Revolver Capacity: ${revolver_limit:,.0f}")
+
 def refresh_live_data():
     print("\n>> Fetching live API data to update dictionary...")
-    for ticker in portfolio_companies.keys():
+    for ticker, details in portfolio_companies.items():
         stock = yf.Ticker(ticker)
         live_ebitda = stock.info.get('ebitda')
         
-        # Overwrite the dictionary value if the API returns a valid number
         if live_ebitda:
+            # Update the stored EBITDA and recalculate the stored revolver limit
             portfolio_companies[ticker]['ttm_ebitda'] = live_ebitda
+            revolver_capacity = (details['max_leverage'] * live_ebitda) - details['funded_debt']
+            portfolio_companies[ticker]['revolver_limit'] = max(0, revolver_capacity)
+            
             print(f"Updated {ticker} EBITDA to ${live_ebitda:,}")
         else:
             print(f"No live EBITDA found for {ticker}. Keeping current data.")
