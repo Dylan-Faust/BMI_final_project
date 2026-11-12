@@ -15,3 +15,5 @@ covered the monte carlo requirement and already started csv reading and writing.
 Essentially, the proposal listed the math functions, while the code I just wrote represents the 
 user interface functions needed to gather the data before the math can happen.
 
+its 11 pm and i can't sleep so I;m think about improvements.i really think that i should add 
+the cash reserve into the mix for the fumction that determines bank covenants automatically.
