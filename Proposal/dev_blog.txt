@@ -1,3 +1,5 @@
+11/8/26
+
 The project proposal primarily outlined the high-level, backend analytical functions needed for 
 the predictive engine, such as fitting the SARIMAX baseline and running the Monte Carlo 
 simulation. 
@@ -17,3 +19,31 @@ user interface functions needed to gather the data before the math can happen.
 
 its 11 pm and i can't sleep so I;m think about improvements.i really think that i should add 
 the cash reserve into the mix for the fumction that determines bank covenants automatically.
+------------------------------------------------------------------------------------------------
+11/12/26
+ransitioned the Revolver Limit calculation from a Cash-Flow basis (Net Debt / EBITDA capacity)
+to an Asset-Based Lending (ABL) proxy, strictly defining the revolver capacity as 10% of the 
+company's Total Book Value.
+
+Specific Updates:
+
+Dictionary Restructure: Added a book_value key to the hardcoded portfolio_companies dictionary.
+
+API Ingestion (yfinance):
+
+Added logic to fetch bookValue (per share) and sharesOutstanding.
+
+Calculated Total Book Value = bookValue * sharesOutstanding.
+
+Logic Overhaul:
+
+Replaced the old formula (Leverage * EBITDA) - Net Debt with Total Book Value * 0.10 in 
+view_companies(), add_update_company(), and refresh_live_data().
+
+User Interface: Added manual fallback prompts for Book Value if API data is missing, and updated
+ all print statements to reflect the new "10% Book Value" methodology.
+------------------------------------------------------------------------------------------------
+11/12/26
+added read and write functions to a new file so that data can be stored in csv format.
+
+Changed the m1_menu to accomdate those changes

@@ -1,5 +1,8 @@
 import csv
 import os
+import pandas as pd
+import pandas_datareader.data as web
+from datetime import datetime
 
 CSV_FILE = 'portfolio_companies.csv'
 
@@ -38,3 +41,30 @@ def save_data(portfolio_companies):
             row = {'Ticker': ticker}
             row.update(details)
             writer.writerow(row)
+
+def fetch_macro_data(start_date='1990-01-01'):
+    """
+    Pulls historical macroeconomic shocks from the FRED API to use as 
+    exogenous training data for the SARIMAX & XGBoost models.
+    """
+    print("\n>> Fetching macroeconomic training data from FRED...")
+    try:
+        end_date = datetime.today().strftime('%Y-%m-%d')
+        
+        # FRED Series IDs: 
+        # SOFR = Secured Overnight Financing Rate (Interest rates)
+        # WPUSI012011 = Producer Price Index for Construction Materials (Inflation/Supply Chain)
+        tickers = ['SOFR', 'WPUSI012011']
+        
+        macro_df = web.DataReader(tickers, 'fred', start_date, end_date)
+        macro_df.columns = ['SOFR_Rate', 'Material_PPI']
+        
+        # Forward-fill and drop empty rows to align daily/monthly datasets
+        macro_df = macro_df.ffill().dropna()
+        
+        print(f">> Success! Retrieved {len(macro_df)} days of macroeconomic data.")
+        return macro_df
+        
+    except Exception as e:
+        print(f">> Error fetching FRED data. Error: {e}")
+        return None

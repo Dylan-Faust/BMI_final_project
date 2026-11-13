@@ -1,4 +1,8 @@
 from m1_menu_funcs import manage_financials_menu
+from data_manager import fetch_macro_data
+from predictive_engine import fit_sarimax_baseline, predict_covenant_breach
+
+
 # Function to print all menu options for the risk assessment tool
 def show_menu():
     print("\n" + "="*45)
@@ -20,7 +24,19 @@ def main():
         if choice == '1':
             manage_financials_menu()
         elif choice == '2':
-            print("Coming soon")
+            print("\n--- Running Liquidity & Covenant Stress Test ---")
+            macro_data = fetch_macro_data()
+            
+            if macro_data is not None:
+                # Mock CapEx data until we build the company-specific pull
+                mock_historical_capex = [12.5, 14.1, 13.8, 16.2, 18.0, 17.5] 
+                
+                # Trigger the predictive engine
+                fit_sarimax_baseline(mock_historical_capex, exog_data=macro_data)
+                
+                # We will wire up the predict_covenant_breach(portfolio, macro_data) function here next
+            else:
+                print(">> Simulation aborted: Could not retrieve macroeconomic baseline data.")
         elif choice == '3':
             print("Coming soon")
         elif choice == '4':
