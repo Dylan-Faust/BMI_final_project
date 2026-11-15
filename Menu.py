@@ -1,5 +1,5 @@
 from m1_menu_funcs import manage_financials_menu
-from data_manager import fetch_macro_data
+from data_manager import fetch_macro_data, load_data
 from predictive_engine import fit_sarimax_baseline, predict_covenant_breach
 
 
@@ -34,7 +34,9 @@ def main():
                 # Trigger the predictive engine
                 fit_sarimax_baseline(mock_historical_capex, exog_data=macro_data)
                 
-                # We will wire up the predict_covenant_breach(portfolio, macro_data) function here next
+                #  Run Monte Carlo Simulation
+                portfolio_companies = load_data()
+                predict_covenant_breach(portfolio_companies, macro_data)
             else:
                 print(">> Simulation aborted: Could not retrieve macroeconomic baseline data.")
         elif choice == '3':

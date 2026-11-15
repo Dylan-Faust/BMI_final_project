@@ -47,3 +47,8 @@ User Interface: Added manual fallback prompts for Book Value if API data is miss
 added read and write functions to a new file so that data can be stored in csv format.
 
 Changed the m1_menu to accomdate those changes
+
+started work on the monte carlo sim. and imported all external packages required for this app to
+run.
+-------------------------------------------------------------------------------------------------
+added a fun
