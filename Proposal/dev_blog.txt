@@ -51,4 +51,14 @@ Changed the m1_menu to accomdate those changes
 started work on the monte carlo sim. and imported all external packages required for this app to
 run.
 -------------------------------------------------------------------------------------------------
-added a fun
+11/15/2026
+Today's development focused on wiring the core predictive models into the main application loop 
+and transitioning the Monte Carlo stress test from randomized placeholders to data-driven 
+predictions.
+
+Pipeline Integration: Connected menu.py (Option 2) to the predictive engine, enabling the 
+Liquidity & Covenant Stress Test to run end-to-end using the portfolio_companies dictionary.
+
+Dynamic Modeling: Implemented a SARIMAX model to establish baseline CapEx spending trajectories.
+Replaced the hardcoded Monte Carlo shock with an XGBRegressor that calculates dynamic cash drains
+based on historical FRED macroeconomic volatility (Material PPI and SOFR).
