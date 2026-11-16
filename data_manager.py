@@ -10,11 +10,7 @@ def load_data():
     portfolio_companies = {}
     if not os.path.exists(CSV_FILE):
         print(f">> No '{CSV_FILE}' found. Generating new database with default portfolio...")
-        portfolio_companies = {
-            "CAT": {"ttm_ebitda": 8500000, "total_cash": 6500000, "book_value": 90000000, "funded_debt": 25000000, "max_leverage": 4.0, "revolver_limit": 9000000},
-            "DE": {"ttm_ebitda": 12000000, "total_cash": 8000000, "book_value": 120000000, "funded_debt": 30000000, "max_leverage": 3.5, "revolver_limit": 12000000},
-            "URI": {"ttm_ebitda": 5000000, "total_cash": 1500000, "book_value": 50000000, "funded_debt": 10000000, "max_leverage": 4.5, "revolver_limit": 5000000}
-        }
+
         save_data(portfolio_companies)
     else:
         with open(CSV_FILE, mode='r', newline='') as file:

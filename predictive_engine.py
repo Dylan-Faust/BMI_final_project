@@ -68,7 +68,7 @@ def predict_covenant_breach(portfolio_companies, macro_training_data):
     
     # MOCK TARGET: Creating a synthetic historical "Cash Drain" target (y).
     # In production, this will be replaced by the company's actual historical CapEx deviations.
-   y_train = (X_train['SOFR_Rate'] * 50000) + (X_train['Material_PPI'] * 10000)
+   y_train = (X_train['SOFR_Rate'] * 50000000) + (X_train['Material_PPI'] * 10000000)
     
     # 2. Train the XGBoost Model
    xgb_model = XGBRegressor(n_estimators=100, learning_rate=0.1, max_depth=3)

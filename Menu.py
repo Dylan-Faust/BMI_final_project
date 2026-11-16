@@ -1,6 +1,7 @@
 from m1_menu_funcs import manage_financials_menu
 from data_manager import fetch_macro_data, load_data
 from predictive_engine import fit_sarimax_baseline, predict_covenant_breach
+from dashboard import show_risk_dashboard
 
 
 # Function to print all menu options for the risk assessment tool
@@ -40,7 +41,8 @@ def main():
             else:
                 print(">> Simulation aborted: Could not retrieve macroeconomic baseline data.")
         elif choice == '3':
-            print("Coming soon")
+            portfolio = load_data()
+            show_risk_dashboard(portfolio)
         elif choice == '4':
             print("Coming soon")
         elif choice == '5':
